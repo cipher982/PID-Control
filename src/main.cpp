@@ -33,8 +33,7 @@ int main()
   uWS::Hub h;
 
   PID pid;
-  // TODO: Initialize the pid variable.
-  //pid = {0,0,0}
+  pid.Init(2,2,2);
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -52,14 +51,37 @@ int main()
           double speed = std::stod(j[1]["speed"].get<std::string>());
           double angle = std::stod(j[1]["steering_angle"].get<std::string>());
           double steer_value;
-          /*
-          * TODO: Calcuate steering value here, remember the steering value is
-          * [-1, 1].
-          * NOTE: Feel free to play around with the throttle and speed. Maybe use
-          * another PID controller to control the speed!
+          double total_error;
+          /* TOOD:
+      
+          def run(robot, tau_p, tau_d, tau_i, n=100, speed=1.0):
+            x_trajectory = []
+            y_trajectory = []
+            prev_cte = robot.y
+            int_cte = 0
+            for i in range(n):
+                cte = robot.y
+                diff_cte = cte - prev_cte
+                prev_cte = cte
+                int_cte += cte
+                steer = -tau_p * cte - tau_d * diff_cte - tau_i * int_cte
+                robot.move(steer, speed)
+                x_trajectory.append(robot.x)
+                y_trajectory.append(robot.y)
+            return x_trajectory, y_trajectory
+
           */
 
-          steer_value = angle - cte;
+          //pid.UpdateError(cte);
+          //std::cout << "d " << d_error;
+          //std::cout << "TotalErr: " << pid.TotalError() << "   ";
+          //steer_value = pid.TotalError();
+          //steer_value = 3;
+
+          pid.UpdateError(cte);
+          total_error = pid.TotalError();
+          steer_value = total_error;
+
           
           // DEBUG
           std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;

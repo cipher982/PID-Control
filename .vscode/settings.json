@@ -1,0 +1,12 @@
+{
+    "editor.tabSize": 2,
+    "files.associations": {
+        "iostream": "cpp",
+        "__split_buffer": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "vector": "cpp"
+    },
+    
+}
