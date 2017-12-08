@@ -7,7 +7,8 @@
 Given a driving simulator with API access to vehicle controls as well as CTE (cross-track-error), or the angle off from center of the road, to gial is to create a PID (proportional–integral–derivative) controller that can maneuver the car around the track as fast as safely possible. Code will be written in C++ and will be looped through a JSON filed populated through a WebSocket API.
 
 
-Below you can see a high-level view of the PID operation. The three variables (P,I,D) can be tuned individually to control their impact, and then are all added up for a final output
+Below you can see a high-level view of the PID operation. The three variables (P,I,D) can be tuned individually to control their impact, and then are all added up for a final output.
+
 ![PID Diagram](https://github.com/cipher982/PID-Control/blob/master/media/PIDforDummies_pid_simplified.png "PID Diagram")
 
 ##### Steps Involved:
