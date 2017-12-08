@@ -6,11 +6,12 @@
 ##### Overview 
 Given a driving simulator with API access to vehicle controls as well as CTE (cross-track-error), or the angle off from center of the road, to gial is to create a PID (proportional–integral–derivative) controller that can maneuver the car around the track as fast as safely possible. Code will be written in C++ and will be looped through a JSON filed populated through a WebSocket API.
 
+![PID Diagram](https://github.com/cipher982/PID-Control/blob/master/media/PIDforDummies_pid_simplified.png "PID Diagram")
+
 ##### Steps Involved:
 - Understand methods of accessing and controlling the car.
 - Convert the PID formula to C++ code and implement.
 - Work in the PID methods to the main program and have it control the vehicle driving on the track.
-
 
 ##### Vehicle Control API
 Using a WebSocket server, the C++ console program communicates with the driving simulator through a JSON file that takes in and reads out various telemetry variables. These include: CTE, speed, angle, throttle, and steering angle.
@@ -29,10 +30,11 @@ double throttle = std::stod(j[1]["throttle"].get<std::string>());
 
 
 ##### PID Method
-Proportional - 
-Integral - 
-Differential - 
-![PID Diagram](https://github.com/cipher982/PID-Control/blob/master/media/PIDforDummies_pid_simplified.png "PID Diagram")
+- **Proportional** - is just directly connected to the error output, always aiming to center or zero-out.
+- **Integral** - is a combination of both the error AND the duration of the combined errors. It iterates over time and adds up the errors.
+- **Differential** - multiplies the rate of change by the derivative, acting is a buffer. It can be thought of in operation as a shock absorber on a car, as it resists more when more force is applied (or error in this case). This effect creates a stability towards the ideal proportional output.
+
+![PID Graph](https://github.com/cipher982/PID-Control/blob/master/media/PID%20Graph.png "PID Graph")
 
 ``` cpp
 void PID::Init(double Kp, double Ki, double Kd) {
