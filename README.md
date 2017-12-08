@@ -6,6 +6,8 @@
 ##### Overview 
 Given a driving simulator with API access to vehicle controls as well as CTE (cross-track-error), or the angle off from center of the road, to gial is to create a PID (proportional–integral–derivative) controller that can maneuver the car around the track as fast as safely possible. Code will be written in C++ and will be looped through a JSON filed populated through a WebSocket API.
 
+
+Below you can see a high-level view of the PID operation. The three variables (P,I,D) can be tuned individually to control their impact, and then are all added up for a final output
 ![PID Diagram](https://github.com/cipher982/PID-Control/blob/master/media/PIDforDummies_pid_simplified.png "PID Diagram")
 
 ##### Steps Involved:
@@ -33,6 +35,8 @@ double throttle = std::stod(j[1]["throttle"].get<std::string>());
 - **Proportional** - is just directly connected to the error output, always aiming to center or zero-out.
 - **Integral** - is a combination of both the error AND the duration of the combined errors. It iterates over time and adds up the errors.
 - **Differential** - multiplies the rate of change by the derivative, acting is a buffer. It can be thought of in operation as a shock absorber on a car, as it resists more when more force is applied (or error in this case). This effect creates a stability towards the ideal proportional output.
+
+With each of these three variables, we can also tune their impact on the whole based on the *tuning constants* Kp, Kd, and Ki. These are the variables that are multiplied by each respective PID error variable in the code below.
 
 ![PID Graph](https://github.com/cipher982/PID-Control/blob/master/media/PID%20Graph.png "PID Graph")
 
@@ -64,6 +68,28 @@ double PID::TotalError() {
   return - Kp * p_error - Kd * d_error - Ki * i_error;
 }
 ```
+
+##### Final tuning
+For me personally, I found these variables to work best with my model at a target speed of 50mph:
+* **P - 5**
+* **I - 0.005**
+* **D - 0.15**
+
+I needed to run a much lower Derivative multiplier than other people, otherwise it had significant delay effects upon the driving, where the front wheels could not react quick enough and it would just drive off the edge pretty quickly. 
+
+Some peopple also added a PID controller for the speed, but I just wrote out a simple *if then* statement for either brake or throttle to lock in at 50mph.
+
+``` cpp
+if (speed > 50) {
+  throttle = -1;
+  }
+else {
+  throttle = 1;
+  }
+```
+
+
+
 
 
 
